@@ -78,6 +78,6 @@ app.use("/uploads",
 );
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on post ${PORT}`));
+// app.listen(PORT, () => console.log(`Server running on post ${PORT}`));
 
 export default app;
