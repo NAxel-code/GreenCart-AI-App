@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+*
+{
+  font-family: "Poppins", sans-serif;
+}
+
+@theme
+{
+  --color-primary: #4fbf8b;
+  --color-primary-dull: #44ae7c;
+}
+
+.input-box
+{
+  @apply w-full flex justify-between gap-3 text-sm text-black bg-gray-50/50 rounded px-4 py-3 mb-4 mt-3 border border-gray-100 outline-none focus-within:border-green-300;
+}
+
+.btn-primary
+{
+  @apply w-full flex items-center justify-center gap-3 text-sm font-medium text-white bg-black shadow-lg shadow-green-600/5 p-[10px] rounded-md my-1 hover:bg-green-600/15 hover:text-black cursor-pointer;
+}
+
+.btn-login
+{
+  @apply w-30 h-10 flex items-center justify-center gap-3 text-sm font-medium p-[2px] rounded-md my-1 cursor-pointer;
+}
+
+.btn-small
+{
+  @apply flex items-center justify-center gap-3 bg-linear-to-r from-[#2cc133] to-[#49c13e] text-sm font-semibold text-white px-7 py-2 rounded-lg hover:bg-black hover:text-white transition-colors cursor-pointer hover:shadow-2xl hover:shadow-green-300;
+}

@@ -1,0 +1,21 @@
+import mongoose from "mongoose";
+
+const ProductSchema = new mongoose.Schema(
+    {
+        name: { type: String, required: true },
+        description: { type: [String], required: true },
+        //[String] -> ACCEPTS BOTH ARRAY AND STRING ["LOL", "SICK", ...]
+        price: { type: Number, required: true },
+        offerPrice: { type: Number, required: true },
+        image: { type: Array, required: true },
+        category: { type: String, required: true },
+        inStock: { type: Boolean, default: true },
+    },
+    {
+        timestamps: true
+    }    
+);
+
+const Product = mongoose.models.product || mongoose.model("Product", ProductSchema);
+
+export default Product;
