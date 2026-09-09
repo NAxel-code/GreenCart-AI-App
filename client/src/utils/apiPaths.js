@@ -5,6 +5,8 @@ export const API_PATHS = {
         REGISTER: "/api/auth/register",
         LOGIN: "/api/auth/login",
         GET_PROFILE: "/api/auth/profile",
+        HISTORY: "/api/auth/history",
+        ORDERS: "/api/auth/orders",
     },
 
     IMAGE: {
@@ -46,9 +48,7 @@ export const API_PATHS = {
     },
     
     RECIPES: {
-        // ADD_TO_SESSION: "/api/questions/add",
-        PIN: (id) => `/api/questions/${id}/pin`,
-        UPDATE_NOTE: (id) => `/api/questions/${id}/note`,
+        ADD_TO_SESSION: "/api/questions/add",
     },
     
     // SESSION: {

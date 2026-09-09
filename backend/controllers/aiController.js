@@ -1,29 +1,30 @@
 import { GoogleGenAI } from "@google/genai";
 import { recipePrompt, dishExplainPrompt } from "../utils/prompts.js";
-import User from "../models/User.js";
 
 //NEVER EVER PUT THE AI HERE EVER AGAIN
 
 // GENERATE RECIPES AND SUGGESTIONS USING GEMINI
 export const generateRecipes = async (req, res) => {
     try {
-        const { userId, numberOfRecipes } = req.body;
+        const { numberOfRecipes, ingredients,
+            allProducts, recentItems,
+            description } = req.body;
 
-        if (!userId || !numberOfRecipes)
+        if (!numberOfRecipes)
             return res.status(400).json({ message: "Missing required fields" });
 
-        const user = await User.findById(userId);
+        let cartItems;
 
-        if (!user)
-            return res.status(404).json({ message: "User not found" });
+        // Use ingredients from frontend if provided
+        if (ingredients && ingredients.length > 0)
+            cartItems = ingredients;
 
-        const cartItems = user.cartItems;
-
-        if (!cartItems || Object.keys(cartItems).length === 0) return res.status(400).json({ message: "No ingredients found in cartItems" });
+        // if ((!cartItems || Object.keys(cartItems).length === 0) && !allProducts && !recentItems)
+        //     return res.status(400).json({ message: "No ingredients found!" });
 
         // console.log("Cart Items:", cartItems);
 
-        const prompt = recipePrompt(cartItems, numberOfRecipes);
+        const prompt = recipePrompt(cartItems, numberOfRecipes, allProducts, recentItems, description);
 
         // console.log("Prompt:", prompt);
 
@@ -34,15 +35,13 @@ export const generateRecipes = async (req, res) => {
             contents: prompt,
         });
 
-        let rawText = response.text;
+        let rawText = response.text || "";
 
-        // CLEAN THE TEXT: remove ```json and ``` from beginning until end
-        const cleanText = rawText
-            .replace(/^```json\s*/, "")     //remove starting ```json
-            .replace(/```$/, "")    //remove ending ```
-            .trim();    //remove extra spaces
+        // CLEAN THE TEXT: extract JSON safely from markdown fences or raw text
+        const jsonMatch = rawText.match(/```json\s*([\s\S]*?)\s*```/i) || rawText.match(/```\s*([\s\S]*?)\s*```/i);
+        const textToParse = (jsonMatch ? jsonMatch[1] : rawText).trim();
 
-        const data = JSON.parse(cleanText);
+        const data = JSON.parse(textToParse);
 
         res.status(200).json(data);
 
@@ -54,21 +53,13 @@ export const generateRecipes = async (req, res) => {
 // GENERATE EXPLANATION FOR THE RECIPES
 export const generateExplanation = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { ingredients, dishName } = req.body;
 
-        if (!userId)
-            return res.status(400).json({ message: "Missing required fields" });
+        const cartItems = ingredients;
 
-        const user = await User.findById(userId);
+        // if (!cartItems || Object.keys(cartItems).length === 0) return res.status(400).json({ message: "No ingredients found in cartItems" });
 
-        if (!user)
-            return res.status(404).json({ message: "User not found" });
-
-        const cartItems = user.cartItems;
-
-        if (!cartItems || Object.keys(cartItems).length === 0) return res.status(400).json({ message: "No ingredients found in cartItems" });
-
-        const prompt = dishExplainPrompt(cartItems);
+        const prompt = dishExplainPrompt(cartItems, dishName);
 
         const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -77,19 +68,19 @@ export const generateExplanation = async (req, res) => {
             contents: prompt,
         });
 
-        let rawText = response.text;
+        let rawText = response.text || "";
 
-        // CLEAN THE TEXT: remove ```json and ``` from beginning until end
-        const cleanText = rawText
-            .replace(/^```json\s*/, "")     //remove starting ```json
-            .replace(/```$/, "")    //remove ending ```
-            .trim();    //remove extra spaces
+        // CLEAN THE TEXT: extract JSON safely from markdown fences or raw text
+        const jsonMatch = rawText.match(/```json\s*([\s\S]*?)\s*```/i) || rawText.match(/```\s*([\s\S]*?)\s*```/i);
+        const textToParse = (jsonMatch ? jsonMatch[1] : rawText).trim();
 
-        const data = JSON.parse(cleanText);
+        const data = JSON.parse(textToParse);
+
+        // console.log("AI Response:", data);
 
         res.status(200).json(data);
 
     } catch (error) {
-        res.status(500).json({ message: "Failed to generate questions", error: error.message });
+        res.status(500).json({ message: "Failed to generate recipe explanation", error: error.message });
     }
 };

@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Order from "../models/Order.js";
+import mongoose from "mongoose";
 
 //GENERATE JWT TOKEN
 const generateToken = (id) => {
@@ -103,4 +105,79 @@ export const getUserProfile = async (req, res) => {
             .status(500)
             .json({ message: "Server error", error: err.message });
     }
+};
+
+//FOR HISTORY -> /api/auth/history
+export const showAllOrders = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        if (!userId) return res.status(400).json({ success: false, message: "Missing userId" });
+
+        const orders = await Order.find({ 
+            userId
+        })
+            .populate("items.product")
+            .sort({ createdAt: -1 });
+
+        const history = orders.map(order => ({
+            orderId: order._id,
+            date: order.createdAt,
+            paymentType: order.paymentType,
+            isPaid: order.isPaid,
+            amount: order.amount,
+            address: order.address,
+            status: order.status,
+            items: order.items.map(item => ({
+                productId: item.product?._id,
+                name: item.product?.name || "No name",
+                quantity: item.quantity || 1,
+                price: item.product?.price || 0,
+                image: item.product?.image || [],
+                category: item.product?.category || "Not Categorized",
+                offerPrice: item.product?.offerPrice || item.product?.price || 0
+            }))
+        }));
+
+        res.json({ success: true, history });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
+
+//FOR SELLER (ALL ORDERS FROM USERS) -> /api/auth/allOrders
+export const sellerOrders = async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== "seller") {
+      return res.status(403).json({ success: false, message: "Access denied: Seller role required" });
+    }
+
+    const orders = await Order.find({})
+      .populate("items.product")
+      .populate("address")
+      .sort({ createdAt: -1 });
+
+    const history = orders.map(order => ({
+      orderId: order._id,
+      date: order.createdAt,
+      paymentType: order.paymentType,
+      isPaid: order.isPaid,
+      amount: order.amount,
+      address: order.address,
+      status: order.status,
+      items: order.items.map(item => ({
+        productId: item.product?._id,
+        name: item.product?.name || "No name",
+        quantity: item.quantity || 1,
+        price: item.product?.price || 0,
+        image: item.product?.image || [],
+        category: item.product?.category || "Not Categorized",
+        offerPrice: item.product?.offerPrice || item.product?.price || 0
+      }))
+    }));
+
+    res.json({ success: true, history });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };

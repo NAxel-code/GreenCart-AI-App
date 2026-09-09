@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppContext } from '../context/AppContext'
 import ProductCard from '../components/ProductCard';
 import { useParams } from 'react-router-dom';
 
 const ProductCategory = () => {
-    const { products, searchQuery } = useAppContext();
+    const { products } = useAppContext();
     const { category } = useParams();
 
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -12,23 +12,21 @@ const ProductCategory = () => {
     useEffect(() => {
         let filtered = products;
 
-        if (searchQuery.length > 0) {
-            filtered = filtered.filter(product =>
-                Array.isArray(product.name) &&
-                product.name.some(cat => cat.toLowerCase() === searchQuery.toLowerCase())
-            )
-        }
-
         if (category) {
-            filtered = filtered.filter(product =>
-                Array.isArray(product.category) &&
-                product.category.some(cat => cat.toLowerCase() === category.toLowerCase())
-            )
+            filtered = filtered.filter(product => {
+                const categories = Array.isArray(product.category)
+                    ? product.category
+                    : typeof product.category === 'string'
+                        ? [product.category]
+                        : [];
+
+                return categories.some(cat => cat.toLowerCase() === category.toLowerCase())
+            })
         }
 
         setFilteredProducts(filtered);
 
-    }, [products, searchQuery, category]);
+    }, [products, category]);
 
 
     return (

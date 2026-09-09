@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import { AppContext } from "../../context/AppContext";
 import ProfileInfoCard from "../../components/Cards/ProfileInfoCard";
@@ -12,17 +12,14 @@ const SellerLayout = () => {
         { name: "Orders", path: "/seller-layout/orders", icon: assets.order_icon },
     ];
 
-    const { user, clearUser, navigate, setLoginType } = useContext(AppContext);
+    const { user, clearUser, navigate, setLoginType, setOpenAuthModal } = useContext(AppContext);
 
     const handleLogout = () => {
         localStorage.clear();
         clearUser();
-
-        const isSeller = setLoginType(null);
-        if (!isSeller) navigate("/");
-
+        setLoginType("user");
+        navigate("/");
         toast.success("Successfully Logged Out!");
-
     };
 
     return (
@@ -33,7 +30,6 @@ const SellerLayout = () => {
                     <div className="relative group">
                         <ProfileInfoCard />
                         <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-                            <NavLink to="/profile" className="block px-4 py-2 hover:bg-gray-100 cursor-pointer hover:underline">Profile</NavLink>
                             {user.role === "user" && (
                                 <NavLink to="/my-orders" className="block px-4 py-2 hover:bg-gray-100 cursor-pointer hover:underline">
                                     My Orders
@@ -41,7 +37,7 @@ const SellerLayout = () => {
                             )}
 
                             {user.role === "seller" && (
-                                <NavLink to="product-list" className="block px-4 py-2 hover:bg-gray-100 cursor-pointer hover:underline">
+                                <NavLink to="/seller-layout/product-list" className="block px-4 py-2 hover:bg-gray-100 cursor-pointer hover:underline">
                                     My Products
                                 </NavLink>
                             )}

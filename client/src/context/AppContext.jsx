@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dummyProducts } from "../assets/assets";
 import toast from "react-hot-toast";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
+import { dummyProducts } from "../assets/assets";
 
 export const AppContext = createContext();
 
@@ -22,6 +22,8 @@ export const AppContextProvider = ({ children }) => {
     const [searchQuery, setSearchQuery] = useState({});
 
     const [openAuthModal, setOpenAuthModal] = useState(false);
+
+    const [myOrders, setMyOrders] = useState([]);
 
     //LOGIN
     const [loading, setLoading] = useState(true);
@@ -54,7 +56,7 @@ export const AppContextProvider = ({ children }) => {
 
         fetchUser();
 
-    }, [user]);
+    }, []);
 
     //FUNCTION TO UPLOAD USER DATA
     const updateUser = async (userData) => {
@@ -81,11 +83,15 @@ export const AppContextProvider = ({ children }) => {
         try {
             const { data } = await axiosInstance.get(API_PATHS.PRODUCT.PRODUCT_LIST);
 
-            if (data.success) setProducts(data.products);
-            else toast.error(data.message);
-
+            if (data.success && data.products.length > 0) {
+                setProducts(data.products);
+            } else {
+                // Fallback ke dummy products jika DB tidak aktif atau produk kosong
+                setProducts(dummyProducts);
+            }
         } catch (error) {
-            toast.error(error.message);
+            console.warn("API tidak tersedia, menggunakan demo products:", error.message);
+            setProducts(dummyProducts); // Fallback saat API error
         }
     };
 
@@ -183,6 +189,7 @@ export const AppContextProvider = ({ children }) => {
         loginType, setLoginType,
         getCartAmount, getCartCount, setCartItems,
         fetchProducts,
+        myOrders, setMyOrders,
 
     };
     return <AppContext.Provider value={value}>

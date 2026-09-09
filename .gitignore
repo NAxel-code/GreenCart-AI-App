@@ -1,1 +1,9 @@
 node_modules
+.env
+.env.*
+dist
+dist-ssr
+*.local
+.DS_Store
+uploads/*
+!uploads/.gitkeep

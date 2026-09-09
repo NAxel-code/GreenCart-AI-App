@@ -4,7 +4,8 @@ import User from "../models/User.js";
 
 export const updateCart = async (req, res) => {
     try {
-        const { userId, cartItems } = req.body;
+        const userId = req.user?._id || req.body.userId;
+        const { cartItems } = req.body;
 
         if (!userId || !cartItems || typeof cartItems !== 'object') 
             return res.status(400).json({ success: false, message: "Missing or invalid fields" });

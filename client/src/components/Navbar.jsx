@@ -10,7 +10,6 @@ import toast from 'react-hot-toast';
 
 const Navbar = () => {
 
-    const [open, setOpen] = useState(false);
     const {
         user, navigate, searchQuery, setSearchQuery,
         openAuthModal, setOpenAuthModal,
@@ -38,7 +37,7 @@ const Navbar = () => {
     return (
         <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
 
-            <NavLink to='/' onClick={() => setOpen(false)}>
+            <NavLink to='/'>
                 <img src={assets.logo} alt="logo"
                     className='h-9'
                 />
@@ -65,12 +64,11 @@ const Navbar = () => {
                     <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">{getCartCount()}</button>
                 </div>
 
-                {/* FOR USER */}
+                {/* FOR USER / SELLER */}
                 {user && (
                     <div className="relative group">
                         <ProfileInfoCard />
                         <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-                            <NavLink to="/profile" className="block px-4 py-2 hover:bg-gray-100 cursor-pointer hover:underline">Profile</NavLink>
                             {user.role === "user" && (
                                 <NavLink to="/my-orders" className="block px-4 py-2 hover:bg-gray-100 cursor-pointer hover:underline">
                                     My Orders
@@ -78,7 +76,7 @@ const Navbar = () => {
                             )}
 
                             {user.role === "seller" && (
-                                <NavLink to="/product-list" className="block px-4 py-2 hover:bg-gray-100 cursor-pointer hover:underline">
+                                <NavLink to="/seller-layout/product-list" className="block px-4 py-2 hover:bg-gray-100 cursor-pointer hover:underline">
                                     My Products
                                 </NavLink>
                             )}

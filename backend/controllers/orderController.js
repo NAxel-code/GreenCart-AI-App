@@ -23,6 +23,8 @@ export const placeOrderCOD = async (req, res) => {
             };
         }));
 
+        console.log(enrichedItems);
+
         await Order.create({
             userId,
             items: enrichedItems, // now contains full item info
@@ -184,7 +186,7 @@ export const stripeWebHooks = async (req, res) => {
 //GET ORDERS BY USER ID -> /api/order/user
 export const getUserOrders = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const userId = req.user?._id || req.query.userId || req.body?.userId;
         const orders = await Order.find({
             userId,
             $or: [{ paymentType: "COD" }, { isPaid: true }]
@@ -200,6 +202,9 @@ export const getUserOrders = async (req, res) => {
 //GET ALL ORDERS -> /api/order/seller
 export const getAllOrders = async (req, res) => {
     try {
+        if (!req.user || req.user.role !== "seller") {
+            return res.status(403).json({ success: false, message: "Access denied: Seller role required" });
+        }
         const orders = await Order.find({
             $or: [{ paymentType: "COD" }, { isPaid: true }]
         }).populate("items.product address").sort({ createdAt: -1 });

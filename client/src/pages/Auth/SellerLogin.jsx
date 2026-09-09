@@ -1,6 +1,4 @@
-import React from 'react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper';
 import { useContext } from 'react';
@@ -8,14 +6,13 @@ import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { AppContext } from '../../context/AppContext';
 import toast from "react-hot-toast";
-import { useEffect } from 'react';
 
 const SellerLogin = ({ setCurrentPage }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const { updateUser, setOpenAuthModal, navigate, isSeller, setIsSeller } = useContext(AppContext);
+  const { updateUser, setOpenAuthModal, navigate, loginType, setLoginType } = useContext(AppContext);
 
   // HANDLE LOGIN FORM SUBMIT
   const handleLogin = async (e) => {
@@ -45,8 +42,7 @@ const SellerLogin = ({ setCurrentPage }) => {
           localStorage.setItem("token", token);
           updateUser(response.data);
 
-          setIsSeller(true);
-          navigate("/seller");
+          navigate("/seller-layout");
 
           toast.success("Successfully Logged In!");
           setOpenAuthModal(false);
@@ -59,11 +55,6 @@ const SellerLogin = ({ setCurrentPage }) => {
       }
 
   };
-
-  useEffect(() => {
-    if(isSeller) navigate("/seller");
-  
-  }, [isSeller]);
   
 
   return (
@@ -87,7 +78,7 @@ const SellerLogin = ({ setCurrentPage }) => {
         <button
           className={`btn-login ${loginType === "seller" ? "bg-primary text-white" : "bg-black text-white"
             }`}
-          onClick={() => navigate("/seller")}
+          onClick={() => navigate("/seller-layout")}
           type="button"
         >
           Login as Seller

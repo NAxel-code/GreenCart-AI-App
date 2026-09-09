@@ -1,14 +1,11 @@
-import React from 'react'
 import Navbar from './components/Navbar'
-import { Route, Router, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import { Toaster } from 'react-hot-toast'
 import Footer from './components/Footer'
 import AllProducts from './pages/AllProducts'
 import ProductCategory from './pages/ProductCategory'
 import ProductDetails from './pages/ProductDetails'
-import { useAppContext } from './context/AppContext'
-import Login from './pages/Auth/Login'
 import AddAddress from './pages/AddAddress'
 import Cart from './pages/Cart'
 import MyOrders from './pages/MyOrders'
@@ -21,13 +18,11 @@ import Load from './components/Loader/Load'
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
-  const { showUserLogin } = useAppContext();
 
   return (
     <div className='text-default min-h-screen text-gray-700 bg-white'>
 
       {isSellerPath ? null : <Navbar />}
-      {showUserLogin ? <Login /> : null}
 
       <Toaster />
 

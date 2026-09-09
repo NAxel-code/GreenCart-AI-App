@@ -78,7 +78,8 @@ export const productList = async (req, res) => {
 // Get Single Product -> /api/product/id
 export const productById = async (req, res) => {
     try {
-        const { id } = req.body;
+        const id = req.query.id || req.params.id || req.body?.id;
+        if (!id) return res.status(400).json({ success: false, message: "Missing product id" });
         const product = await Product.findById(id);
 
         res.json({ success: true, product });

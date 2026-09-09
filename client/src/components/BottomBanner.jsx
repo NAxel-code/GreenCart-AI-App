@@ -17,19 +17,18 @@ const BottomBanner = () => {
               Why You Must Shop With Us?
           </h1>
           {features.map((feature, idx) => (
-              <div key={idx} className='flex items-center gap-4 mt-2'>
-                <img src={feature.icon} alt={feature.title} 
-                  className='md:w-11 w-9'
+              <div key={idx} className='flex items-center gap-4 mt-4'>
+                <img src={feature.icon} alt={feature.title}
+                  className='md:w-11 w-9 flex-shrink-0'
                 />
-
-                <h3 className="text-lg md:text-xl font-semibold">
-                  {feature.title}
-                </h3>
-
-                <p className="text-gray-500/70 text-xs md:text-sm">
-                  {feature.description}
-                </p>
-
+                <div className='flex flex-col'>
+                  <h3 className="text-base md:text-lg font-semibold leading-tight">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-500/70 text-xs md:text-sm mt-0.5">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
           ))}
         </div>
@@ -38,4 +37,4 @@ const BottomBanner = () => {
   )
 }
 
-export default BottomBanner
+export default BottomBanner

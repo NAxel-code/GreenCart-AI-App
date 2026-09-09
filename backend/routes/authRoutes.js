@@ -4,7 +4,9 @@ import { protect } from "../middlewares/authMiddleware.js";
 import {
     registerUser,
     loginUser,
-    getUserProfile
+    getUserProfile,
+    showAllOrders,
+    sellerOrders
 
 } from "../controllers/authController.js";
 
@@ -15,6 +17,8 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/profile", protect, getUserProfile);
+router.post("/history", protect, showAllOrders);
+router.post("/orders", protect, sellerOrders);
 
 router.post("/upload-image", upload.single("image"), (req, res) => {
     if(!req.file) return res.status(400).json({ message: "No File Uploaded" });

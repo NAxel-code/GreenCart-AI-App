@@ -1,18 +1,8 @@
-import React from 'react'
 import { useContext } from 'react'
 import { AppContext } from '../../context/AppContext';
-import { NavLink } from 'react-router-dom';
 
 const ProfileInfoCard = () => {
   const { user } = useContext(AppContext);
-
-  const handleLogout = () => {
-        localStorage.clear();
-        clearUser();
-
-        toast.success("Successfully Logged Out!");
-        navigate("/");
-    };
 
   return (
     user && (
