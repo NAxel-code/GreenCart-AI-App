@@ -18,13 +18,13 @@
 ## 📸 Tampilan UI
 
 ### 🏠 Halaman Utama & Kategori
-![Hero & Categories](screenshots/ui_page_1.png)
+![Hero & Categories](https://raw.githubusercontent.com/NAxel-code/GreenCart-AI-App/assets/screenshots/ui_page_1.png)
 
 ### 🌟 Best Sellers & Kenapa Belanja di GreenCart
-![Best Sellers & Features](screenshots/ui_page_2.png)
+![Best Sellers & Features](https://raw.githubusercontent.com/NAxel-code/GreenCart-AI-App/assets/screenshots/ui_page_2.png)
 
 ### 📩 Newsletter & Footer
-![Footer](screenshots/ui_page_3.png)
+![Footer](https://raw.githubusercontent.com/NAxel-code/GreenCart-AI-App/assets/screenshots/ui_page_3.png)
 
 ---
 
