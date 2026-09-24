@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
   <img src="client/src/assets/greencart_logo.svg" alt="GreenCart Logo" width="120"/>
 
   # 🛒 GreenCart — AI-Powered Grocery App
@@ -17,11 +17,14 @@
 
 ## 📸 Tampilan UI
 
-### 🏠 Halaman Utama & Navigasi
-![Home & Navbar](screenshots/home-navbar.png)
+### 🏠 Halaman Utama & Kategori
+![Hero & Categories](screenshots/ui_page_1.png)
 
-### 🌟 Kenapa Belanja di GreenCart?
-![Why Shop With Us](screenshots/bottom-banner.png)
+### 🌟 Best Sellers & Kenapa Belanja di GreenCart
+![Best Sellers & Features](screenshots/ui_page_2.png)
+
+### 📩 Newsletter & Footer
+![Footer](screenshots/ui_page_3.png)
 
 ---
 
